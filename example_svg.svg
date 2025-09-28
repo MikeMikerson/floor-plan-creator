@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1200 800" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Grid -->
+    <pattern id="grid20" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+    </pattern>
+    <pattern id="grid100" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="none" stroke="#cccccc" stroke-width="1"/>
+    </pattern>
+    <!-- Wall style -->
+    <style>
+      .bg { fill: url(#grid20); }
+      .bg-100 { fill: url(#grid100); }
+      .wall { stroke: #111; stroke-width: 12; fill: none; stroke-linecap: square; }
+      .room { fill: #fafafa; stroke: #555; stroke-width: 2; }
+      .label { font: 18px/1.2 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; fill:#222; }
+      .fixture { fill:#f0f0f0; stroke:#888; stroke-width:2; }
+      .door { stroke:#111; stroke-width:4; fill:none; }
+      .sliding { stroke:#111; stroke-width:4; }
+      .drag-hint { fill:#fffef5; stroke:#e6c200; stroke-width:2; opacity:.7; }
+      .draggable { cursor: move; }
+      .pin { fill:#fff; stroke:#aaa; stroke-width:2; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="800" class="bg"/>
+  <rect x="0" y="0" width="1200" height="800" class="bg-100" opacity="0.5"/>
+
+  <!-- Outer walls (building boundary) -->
+  <rect x="80" y="60" width="1040" height="680" class="wall"/>
+
+  <!-- Drag targets: each block is a <g class="draggable"> with its own inner walls/fixtures -->
+  <!-- LIVING / DINING / KITCHEN (LDK) -->
+  <g class="draggable" data-name="LDK" transform="translate(420,120)">
+    <rect x="0" y="0" width="520" height="360" class="room" rx="4"/>
+    <!-- inner thin wall hint -->
+    <rect x="0" y="0" width="520" height="360" class="wall" stroke-width="8" opacity="0.3"/>
+    <!-- Kitchen run -->
+    <rect x="24" y="24" width="220" height="60" class="fixture" rx="4"/>
+    <rect x="30" y="34" width="40" height="40" class="fixture" fill="#e8f3ff"/>
+    <rect x="74" y="34" width="40" height="40" class="fixture" fill="#ffe8e8"/>
+    <rect x="118" y="34" width="118" height="40" class="fixture"/>
+    <!-- Sliding door example -->
+    <line x1="520" y1="120" x2="480" y2="120" class="sliding"/>
+    <line x1="520" y1="180" x2="480" y2="180" class="sliding"/>
+    <!-- Label -->
+    <text x="260" y="200" text-anchor="middle" class="label">LIVING • DINING • KITCHEN</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- BEDROOM -->
+  <g class="draggable" data-name="Bedroom" transform="translate(120,340)">
+    <rect x="0" y="0" width="360" height="260" class="room" rx="4"/>
+    <rect x="0" y="0" width="360" height="260" class="wall" stroke-width="8" opacity="0.3"/>
+    <!-- Closet -->
+    <rect x="20" y="200" width="320" height="40" class="fixture"/>
+    <!-- Sliding doors -->
+    <line x1="120" y1="0" x2="120" y2="40" class="sliding"/>
+    <line x1="180" y1="0" x2="180" y2="40" class="sliding"/>
+    <text x="180" y="140" text-anchor="middle" class="label">BEDROOM</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- SERVICE ROOM (Japanese "サービスルーム" / den) -->
+  <g class="draggable" data-name="Service Room" transform="translate(780,520)">
+    <rect x="0" y="0" width="280" height="220" class="room" rx="4"/>
+    <rect x="0" y="0" width="280" height="220" class="wall" stroke-width="8" opacity="0.3"/>
+    <text x="140" y="120" text-anchor="middle" class="label">SERVICE ROOM</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- WASHROOM + BATH -->
+  <g class="draggable" data-name="Bath Unit" transform="translate(120,120)">
+    <rect x="0" y="0" width="220" height="160" class="room" rx="4"/>
+    <rect x="0" y="0" width="220" height="160" class="wall" stroke-width="8" opacity="0.3"/>
+    <!-- Unit bath -->
+    <rect x="10" y="10" width="120" height="90" class="fixture" rx="6"/>
+    <text x="70" y="68" text-anchor="middle" class="label" font-size="14">BATH</text>
+    <!-- Sink -->
+    <rect x="140" y="10" width="70" height="40" class="fixture" rx="4"/>
+    <text x="175" y="36" text-anchor="middle" class="label" font-size="12">SINK</text>
+    <!-- Laundry space -->
+    <rect x="140" y="60" width="70" height="40" class="fixture" rx="4"/>
+    <text x="175" y="86" text-anchor="middle" class="label" font-size="12">WASH</text>
+    <!-- Door swing -->
+    <path d="M220,160 a60,60 0 0 0 -60,-60" class="door"/>
+    <text x="110" y="140" text-anchor="middle" class="label" font-size="14">WASHROOM</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- TOILET -->
+  <g class="draggable" data-name="Toilet" transform="translate(360,520)">
+    <rect x="0" y="0" width="180" height="120" class="room" rx="4"/>
+    <rect x="0" y="0" width="180" height="120" class="wall" stroke-width="8" opacity="0.3"/>
+    <rect x="60" y="25" width="60" height="70" class="fixture" rx="30"/>
+    <text x="90" y="105" text-anchor="middle" class="label">TOILET</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- GENKAN (entry) -->
+  <g class="draggable" data-name="Genkan" transform="translate(560,520)">
+    <rect x="0" y="0" width="200" height="120" class="room" rx="4"/>
+    <rect x="0" y="0" width="200" height="120" class="wall" stroke-width="8" opacity="0.3"/>
+    <rect x="10" y="70" width="180" height="36" class="fixture"/>
+    <text x="100" y="54" text-anchor="middle" class="label">GENKAN</text>
+    <!-- Entrance door -->
+    <path d="M0,120 a80,80 0 0 1 80,-80" class="door"/>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- Balcony -->
+  <g class="draggable" data-name="Balcony" transform="translate(960,120)">
+    <rect x="0" y="0" width="120" height="360" class="room" rx="2" fill="#f7fbff" stroke="#68a7ff"/>
+    <text x="60" y="180" text-anchor="middle" class="label">BALCONY</text>
+    <circle cx="12" cy="12" r="8" class="pin"/>
+  </g>
+
+  <!-- Drag help -->
+  <g pointer-events="none">
+    <rect x="880" y="20" width="300" height="70" class="drag-hint" rx="6"/>
+    <text x="1030" y="50" text-anchor="middle" class="label">Drag any block to rearrange</text>
+    <text x="1030" y="68" text-anchor="middle" class="label" font-size="14">Snap = 20 units</text>
+  </g>
+
+  <!-- Minimal drag logic inside SVG -->
+  <script><![CDATA[
+    (function() {
+      const svg = document.documentElement;
+      const snap = 20; // grid snap
+      let active = null, offset = {x:0,y:0};
+
+      function pt(evt){
+        const p = svg.createSVGPoint();
+        p.x = evt.clientX; p.y = evt.clientY;
+        return p.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function getTranslate(g){
+        const t = g.transform.baseVal.consolidate();
+        if (!t) return {x:0,y:0};
+        const m = t.matrix;
+        return {x:m.e, y:m.f};
+      }
+
+      function setTranslate(g, x, y){
+        g.setAttribute("transform", `translate(${x},${y})`);
+      }
+
+      svg.addEventListener("pointerdown", (e) => {
+        const g = e.target.closest(".draggable");
+        if (!g) return;
+        active = g;
+        const p = pt(e);
+        const t = getTranslate(g);
+        offset.x = p.x - t.x;
+        offset.y = p.y - t.y;
+        g.setPointerCapture(e.pointerId);
+      });
+
+      svg.addEventListener("pointermove", (e) => {
+        if (!active) return;
+        const p = pt(e);
+        let x = p.x - offset.x;
+        let y = p.y - offset.y;
+        // snap
+        x = Math.round(x / snap) * snap;
+        y = Math.round(y / snap) * snap;
+        // keep within outer bounds
+        const pad = 10;
+        const bbox = active.getBBox();
+        x = Math.max(80+pad, Math.min(80+1040 - bbox.width - pad, x));
+        y = Math.max(60+pad, Math.min(60+680 - bbox.height - pad, y));
+        setTranslate(active, x, y);
+      });
+
+      svg.addEventListener("pointerup", () => active = null);
+      svg.addEventListener("pointercancel", () => active = null);
+    })();
+  ]]></script>
+</svg>

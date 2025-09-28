@@ -1,7 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const VECTOR_API_BASE = import.meta.env.VITE_VECTOR_API_BASE_URL ?? ''
-const DEFAULT_VECTOR_PROVIDER = import.meta.env.VITE_VECTOR_PROVIDER ?? 'openai'
+const RESOLVED_VECTOR_API_BASE = (() => {
+  if (VECTOR_API_BASE) {
+    return VECTOR_API_BASE
+  }
+  if (typeof window === 'undefined') {
+    return ''
+  }
+
+  const { protocol, hostname } = window.location
+  const defaultPort = 4000
+  return `${protocol}//${hostname}:${defaultPort}`
+})()
+const DEFAULT_VECTOR_PROVIDER = import.meta.env.VITE_VECTOR_PROVIDER ?? 'potrace'
 
 const referenceObjects = [
   { id: 'door', label: 'Standard Door', inches: 36 },
@@ -586,20 +598,39 @@ function LayoutDesignerSection({
     setVectorError(null)
 
     try {
-      const baseUrl = VECTOR_API_BASE ? VECTOR_API_BASE.replace(/\/$/, '') : ''
+      const baseUrl = RESOLVED_VECTOR_API_BASE ? RESOLVED_VECTOR_API_BASE.replace(/\/$/, '') : ''
       const requestUrl = `${baseUrl}/api/vectorize`
 
       const overrideParts = []
+      if (layoutState.floorPlan.name) {
+        overrideParts.push(`Source file name: ${layoutState.floorPlan.name}.`)
+      }
       if (layoutState.floorPlan.width) {
         overrideParts.push(`Source image width: ${layoutState.floorPlan.width}px.`)
       }
       if (layoutState.floorPlan.height) {
         overrideParts.push(`Source image height: ${layoutState.floorPlan.height}px.`)
       }
+      if (layoutState.floorPlan.aspectRatio) {
+        overrideParts.push(`Aspect ratio: ${layoutState.floorPlan.aspectRatio.toFixed(6)}.`)
+      }
       if (layoutState.scale?.inchesPerPixel) {
         const dpi = 1 / layoutState.scale.inchesPerPixel
         overrideParts.push(`Approximate pixels per inch: ${dpi.toFixed(4)}.`)
       }
+      overrideParts.push(
+        'Reproduce every wall, fixture, label, hatch, and furniture outline exactly as seen, matching colours, stroke weights, and spacing.',
+      )
+      overrideParts.push(
+        'Convert any text or dimension callouts to <path> glyph outlines grouped under <g data-fragment-id="annotation"> elements to allow precise repositioning.',
+      )
+      overrideParts.push(
+        'Include <defs> patterns for 20-unit and 100-unit grids plus CSS classes (.bg, .bg-100, .wall, .room, .label, .fixture, .door, .sliding, .drag-hint, .draggable, .pin) that are referenced throughout the SVG, matching the provided sample format.',
+      )
+      overrideParts.push(
+        'Structure each room or fixture cluster as <g class="draggable" data-fragment-id="..." transform="translate(x,y)"> with interior <path> elements representing walls, fixtures, and labels.',
+      )
+      overrideParts.push('Return only the raw <svg>...</svg> markup string with no JSON, markdown, or commentary.')
 
       const response = await fetch(requestUrl, {
         method: 'POST',
@@ -1122,6 +1153,7 @@ function LayoutDesignerSection({
                     value={vectorProvider}
                     onChange={(event) => setVectorProvider(event.target.value)}
                   >
+                    <option value="potrace">High fidelity (Potrace)</option>
                     <option value="openai">OpenAI</option>
                     <option value="gemini">Google Gemini</option>
                   </select>

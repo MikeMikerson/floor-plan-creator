@@ -21,7 +21,7 @@ This repository contains the React 18 prototype for the MoveWise mobile experien
 ## Layout Designer Highlights
 
 - Upload a floor plan image, establish real-world scale with common reference objects, and autosave the setup locally
-- Convert the raster floor plan into movable SVG fragments using OpenAI or Google Gemini so walls and fixtures can be rearranged alongside furniture
+- Convert the raster floor plan into movable SVG fragments using a high-fidelity Potrace pipeline (with optional OpenAI or Google Gemini refinements) so walls and fixtures can be rearranged alongside furniture
 - Zoom, pan, and snap to a flexible grid while arranging furniture placed from the inventory via drag-and-drop
 - Rotate items with on-canvas handles or keyboard shortcuts, colour-code by room, and surface same-room collisions in real time
 - Manage history with undo/redo controls and reset the entire layout (including floor plan, vector fragments, and scale) through a confirmation dialog
@@ -41,6 +41,9 @@ GEMINI_API_KEY=your-gemini-key
 # OPENAI_VISION_MODEL=gpt-4.1-mini
 # GEMINI_VISION_MODEL=gemini-2.5-flash
 # CLIENT_ORIGIN=http://localhost:5173
+# PORT=4000
+# VITE_VECTOR_API_BASE_URL=http://localhost:4000
+# VITE_VECTOR_PROVIDER=potrace
 ```
 
-The front-end reads `VITE_VECTOR_API_BASE_URL` and `VITE_VECTOR_PROVIDER` to target a remote server or default provider when needed.
+Potrace-based conversion is the default and requires no API key. Supply OpenAI or Gemini keys only if those providers will be used from the in-app dropdown. The front-end reads `VITE_VECTOR_API_BASE_URL` and `VITE_VECTOR_PROVIDER` to target a remote server or default provider when needed.

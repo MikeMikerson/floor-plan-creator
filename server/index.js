@@ -4,6 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import { vectorizeWithOpenAI } from './providers/openai.js'
 import { vectorizeWithGemini } from './providers/gemini.js'
+import { vectorizeWithPotrace } from './providers/potrace.js'
 
 const PORT = process.env.PORT || 4000
 const DEFAULT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
@@ -67,17 +68,24 @@ app.post('/api/vectorize', async (req, res) => {
 
     let svg
 
-    if (provider === 'gemini') {
+    if (provider === 'potrace') {
+      svg = await vectorizeWithPotrace(payload)
+    } else if (provider === 'gemini') {
       svg = await vectorizeWithGemini(payload)
     } else {
       svg = await vectorizeWithOpenAI(payload)
     }
 
-    if (!svg) {
-      return res.status(502).json({ error: 'No SVG returned from AI provider' })
+    if (typeof svg !== 'string') {
+      return res.status(502).json({ error: 'Provider response did not contain SVG text' })
     }
 
-    res.json({ svg })
+    const trimmedSvg = svg.trim()
+    if (!trimmedSvg.startsWith('<svg') || !trimmedSvg.endsWith('</svg>')) {
+      return res.status(502).json({ error: 'Provider returned invalid SVG markup' })
+    }
+
+    res.json({ svg: trimmedSvg })
   } catch (error) {
     const status = error.status || 500
     res.status(status).json({

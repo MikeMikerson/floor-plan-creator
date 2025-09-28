@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "@google/genai": "^0.6.0",
-  "dotenv": "^16.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
+    "image-size": "^2.0.1",
     "imagetracerjs": "^1.2.6",
     "multer": "^1.4.5-lts.1",
-  "cors": "^2.8.5",
     "openai": "^4.80.1",
+    "potrace": "^2.1.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
