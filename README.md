@@ -1,6 +1,6 @@
 # MoveWise Floor Plan Helper
 
-This repository contains the React 18 prototype for the MoveWise mobile experience. The current build focuses on scaffolding the four core feature areas outlined in the PRD: move timeline management, furniture inventory, layout planning, and export/share preparation.
+This repository contains the React 18 prototype for the MoveWise mobile experience. The current build now includes a fully interactive "Home Layout Designer" that lets teams validate the PRD flows end-to-end: upload and scale floor plans, drag furniture from the inventory, arrange items with grid snapping, and review collision warnings before moving day.
 
 ## Scripts
 
@@ -11,11 +11,18 @@ This repository contains the React 18 prototype for the MoveWise mobile experien
 
 ## Project Structure
 
-- `src/App.jsx` – application shell binding the feature placeholders together
+- `src/App.jsx` – application shell coordinating feature state and persistence
 - `src/components` – feature-specific UI components and helper sections
 - `src/App.css` and `src/index.css` – global and layout styling
 - `TASKS.md` – implementation backlog covering remaining PRD functionality
 
+## Layout Designer Highlights
+
+- Upload a floor plan image, establish real-world scale with common reference objects, and autosave the setup locally
+- Zoom, pan, and snap to a flexible grid while arranging furniture placed from the inventory via drag-and-drop
+- Rotate items with on-canvas handles or keyboard shortcuts, colour-code by room, and surface same-room collisions in real time
+- Manage history with undo/redo controls and reset the entire layout (including floor plan and scale) through a confirmation dialog
+
 ## Next Steps
 
-Follow the items in `TASKS.md` to flesh out persistence, the interactive canvas, and sharing flows. The scaffold was designed so each feature can evolve independently while sharing state through the top-level app.
+Focus on the remaining backlog items in `TASKS.md`, including persistence for timeline/inventory, the export/share flow, onboarding guidance, and automated testing.

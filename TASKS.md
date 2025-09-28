@@ -13,15 +13,15 @@
 - [ ] Export inventory data for use in layout designer and external tools
 
 ## Home Layout Designer
-- [ ] Build zoomable 2D canvas with pan/zoom gestures and grid snapping
-- [ ] Implement drag-and-drop from inventory drawer onto canvas
-- [ ] Render furniture rectangles at accurate scale using inches-per-pixel factor
-- [ ] Enable rotation controls and keyboard nudging for precise placement
-- [ ] Apply room-based color coding and legend display
-- [ ] Detect overlaps within same room category and provide real-time warnings
-- [ ] Support undo/redo history for canvas actions
-- [ ] Autosave canvas state (floor plan, scale, furniture positions) locally
-- [ ] Add reset workflow with confirmation dialog to clear canvas
+- [x] Build zoomable 2D canvas with pan/zoom gestures and grid snapping
+- [x] Implement drag-and-drop from inventory drawer onto canvas
+- [x] Render furniture rectangles at accurate scale using inches-per-pixel factor
+- [x] Enable rotation controls and keyboard nudging for precise placement
+- [x] Apply room-based color coding and legend display
+- [x] Detect overlaps within same room category and provide real-time warnings
+- [x] Support undo/redo history for canvas actions
+- [x] Autosave canvas state (floor plan, scale, furniture positions) locally
+- [x] Add reset workflow with confirmation dialog to clear canvas
 
 ## Export & Sharing
 - [ ] Generate clean canvas snapshot without UI chrome
