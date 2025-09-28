@@ -198,6 +198,58 @@
   border: 1px solid #d8e0ec;
 }
 
+
+.vectorize-controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vectorize-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.vectorize-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.layout-fragment-group {
+  mix-blend-mode: multiply;
+}
+
+.layout-fragment-path {
+  cursor: grab;
+  transition: opacity 0.2s ease, stroke-width 0.2s ease, transform 0.15s ease;
+  stroke-width: 0.75;
+}
+
+.layout-fragment-path.selected {
+  cursor: grabbing;
+  stroke: #0f172a;
+  stroke-width: 1.8;
+}
+
+.layout-fragment-path:hover {
+  opacity: 0.9;
+}
+
+
 .layout-legend ul {
   list-style: none;
   margin: 0.75rem 0 0;

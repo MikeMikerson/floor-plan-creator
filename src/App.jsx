@@ -26,6 +26,7 @@ function createDefaultLayoutState() {
     scale: null,
     items: [],
     viewport: { x: 0, y: 0, zoom: 1 },
+    vectorPlan: null,
   }
 }
 
@@ -48,6 +49,89 @@ function sanitizeLayoutItem(raw) {
       x: Number(position.x) || 0,
       y: Number(position.y) || 0,
     },
+  }
+}
+
+function sanitizeVectorFragment(raw, index) {
+  if (!raw || typeof raw !== 'object') {
+    return null
+  }
+
+  const translation = raw.translation && typeof raw.translation === 'object' ? raw.translation : {}
+  const rawPaths = Array.isArray(raw.paths) ? raw.paths : null
+
+  const paths = (rawPaths ?? [raw]).map((pathEntry, pathIndex) => {
+    if (!pathEntry || typeof pathEntry !== 'object') {
+      return null
+    }
+
+    const fillOpacityValue = typeof pathEntry.fillOpacity === 'number'
+      ? pathEntry.fillOpacity
+      : typeof pathEntry.opacity === 'number'
+        ? pathEntry.opacity
+        : undefined
+
+    return {
+      id: pathEntry.id ?? createId(`fragment-${index ?? 0}-path-${pathIndex}`),
+      d: typeof pathEntry.d === 'string' ? pathEntry.d : '',
+      fill: typeof pathEntry.fill === 'string' ? pathEntry.fill : '#000000',
+      stroke: typeof pathEntry.stroke === 'string' ? pathEntry.stroke : 'none',
+      fillOpacity: typeof fillOpacityValue === 'number' ? fillOpacityValue : undefined,
+      transform: typeof pathEntry.transform === 'string' ? pathEntry.transform : undefined,
+    }
+  }).filter(Boolean)
+
+  if (paths.length === 0) {
+    return null
+  }
+
+  const primary = paths[0]
+
+  return {
+    id: raw.id ?? createId(`fragment-${index ?? 0}`),
+    d: primary.d,
+    fill: primary.fill,
+    stroke: primary.stroke,
+    fillOpacity: primary.fillOpacity,
+    translation: {
+      x: Number(translation.x) || 0,
+      y: Number(translation.y) || 0,
+    },
+    paths,
+  }
+}
+
+function sanitizeVectorPlan(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return null
+  }
+
+  if (!Array.isArray(raw.fragments) || raw.fragments.length === 0) {
+    return null
+  }
+
+  const fragments = raw.fragments.map((fragment, index) => sanitizeVectorFragment(fragment, index)).filter(Boolean)
+  if (fragments.length === 0) {
+    return null
+  }
+
+  const viewBox = Array.isArray(raw.viewBox)
+    ? raw.viewBox.map((value) => Number(value) || 0)
+    : typeof raw.viewBox === 'string'
+      ? raw.viewBox
+          .split(/\s+/)
+          .map((value) => Number(value) || 0)
+      : null
+
+  return {
+    width: Number(raw.width) || null,
+    height: Number(raw.height) || null,
+    viewBox,
+    fragments,
+    generatedAt: Number(raw.generatedAt) || Date.now(),
+    provider: typeof raw.provider === 'string' ? raw.provider : null,
+    rawSvg: typeof raw.rawSvg === 'string' ? raw.rawSvg : null,
+    source: typeof raw.source === 'string' ? raw.source : null,
   }
 }
 
@@ -87,6 +171,11 @@ function sanitizeLayoutState(raw) {
       y: Number(raw.viewport.y) || 0,
       zoom: clampZoom(raw.viewport.zoom),
     }
+  }
+
+  const vectorPlan = sanitizeVectorPlan(raw.vectorPlan)
+  if (vectorPlan) {
+    base.vectorPlan = vectorPlan
   }
 
   return base
